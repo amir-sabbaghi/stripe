@@ -690,7 +690,11 @@ instance Show Interval where
 -- | `Read` instance for `Interval`
 instance Read Interval where
   readPrec =
-    do (R.String s) <- lexP
+    do s' <- lexP
+       let s = case s' of
+                 R.String s -> s
+                 R.Ident s -> s
+                 _ -> ""
        case s of
          "day"   -> return Day
          "week"  -> return Week
